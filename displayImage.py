@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import cognitive_api
+import decide_advert
 
 # Camera 0 is the integrated web cam on my netbook
 camera_port = 0
@@ -52,7 +53,7 @@ json = None
 params = None
 
 result = cognitive_api.processRequest(json, data, headers, params)
-
+decide_advert.calculate(result)
 if result is not None:
     # Load the original image from disk
     data8uint = np.fromstring(data, np.uint8)  # Convert string to an unsigned int array
