@@ -1,18 +1,14 @@
 from __future__ import print_function
-import time
-import requests
-import cv2
+
 import operator
-import numpy as np
+import time
 
-# Import library to display results
-import matplotlib.pyplot as plt
-
-# Display images within Jupyter
+import cv2
+import requests
 
 # Variables
 _url = 'https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=age,gender,headPose,smile,facialHair,glasses,emotion,hair'
-_key = 'c82e927ab44c4a31904d75d2d81e2681' # Here you have to paste your primary key
+_key = 'c82e927ab44c4a31904d75d2d81e2681'  # Here you have to paste your primary key
 _maxNumRetries = 10
 
 
@@ -66,57 +62,8 @@ def renderResultOnImage(result, img):
 
     for currFace in result:
         faceRectangle = currFace['faceRectangle']
-        currEmotion = max(currFace['scores'].items(), key=operator.itemgetter(1))[0]
+        currEmotion = max(currFace['faceAttributes']['emotion'].items(), key=operator.itemgetter(1))[0]
 
         textToWrite = "%s" % (currEmotion)
         cv2.putText(img, textToWrite, (faceRectangle['left'], faceRectangle['top'] - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,
                     (255, 0, 0), 1)
-
-
-# URL direction to image
-urlImage = 'https://raw.githubusercontent.com/Microsoft/ProjectOxford-ClientSDK/master/Face/Windows/Data/detection3.jpg'
-
-headers = dict()
-headers['Ocp-Apim-Subscription-Key'] = _key
-headers['Content-Type'] = 'application/json'
-
-json = {'url': urlImage}
-data = None
-params = None
-
-result = processRequest(json, data, headers, params)
-
-if result is not None:
-    # Load the original image, fetched from the URL
-    arr = np.asarray(bytearray(requests.get(urlImage).content), dtype=np.uint8)
-    img = cv2.cvtColor(cv2.imdecode(arr, -1), cv2.COLOR_BGR2RGB)
-
-    renderResultOnImage(result, img)
-
-    ig, ax = plt.subplots(figsize=(15, 20))
-    ax.imshow(img)
-    cv2.waitKey(0)
-
-    # # Load raw image file into memory
-    # pathToFileInDisk = r'D:\tmp\detection3.jpg'
-    # with open(pathToFileInDisk, 'rb') as f:
-    #     data = f.read()
-    #
-    # headers = dict()
-    # headers['Ocp-Apim-Subscription-Key'] = _key
-    # headers['Content-Type'] = 'application/octet-stream'
-    #
-    # json = None
-    # params = None
-    #
-    # result = processRequest(json, data, headers, params)
-    #
-    # if result is not None:
-    #     # Load the original image from disk
-    #     data8uint = np.fromstring(data, np.uint8)  # Convert string to an unsigned int array
-    #     img = cv2.cvtColor(cv2.imdecode(data8uint, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
-    #
-    #     renderResultOnImage(result, img)
-    #
-    #     ig, ax = plt.subplots(figsize=(15, 20))
-    #     ax.imshow(img)
