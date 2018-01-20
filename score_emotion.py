@@ -1,4 +1,7 @@
 def calculate(result):
+    if len(result) == 0:
+        return "blank"
+
     scores = list([sum(list(map(get_happiness, result))) / len(result),
     sum(list(map(get_neutral, result))) / len(result),
     sum(list(map(get_sadness, result))) / len(result),
