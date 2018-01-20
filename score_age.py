@@ -1,14 +1,11 @@
 def calculate(result):
-    from statistics import mode
-
     age_list = list(map(get_age, result))
     bin_list = list(map(bin_age, age_list))
 
     print(age_list)
     print(bin_list)
 
-    # index = scores.index(max(scores))
-    return mode(bin_list)[0]
+    return max(set(bin_list), key=bin_list.count)
 
 
 def get_age(x):
