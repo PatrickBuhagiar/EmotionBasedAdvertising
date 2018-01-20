@@ -1,12 +1,14 @@
 from __future__ import print_function
 
 import cv2
-import numpy as np
 # Import library to display results
 import matplotlib.pyplot as plt
+import numpy as np
+import score_age
 
 import cognitive_api
-import decide_advert
+import score_emotion
+import score_gender
 
 # Camera 0 is the integrated web cam on my netbook
 camera_port = 0
@@ -16,7 +18,7 @@ ramp_frames = 30
 
 # Variables
 _url = 'https://westus.api.cognitive.microsoft.com/face/v1.0/detect?returnFaceId=true&returnFaceLandmarks=false&returnFaceAttributes=age,gender,headPose,smile,facialHair,glasses,emotion,hair'
-_key = 'c82e927ab44c4a31904d75d2d81e2681' # Here you have to paste your primary key
+_key = 'c82e927ab44c4a31904d75d2d81e2681'  # Here you have to paste your primary key
 _maxNumRetries = 10
 
 # Now we can initialize the camera capture object with the cv2.VideoCapture class.
@@ -53,7 +55,19 @@ json = None
 params = None
 
 result = cognitive_api.processRequest(json, data, headers, params)
-decide_advert.calculate(result)
+
+# Find dominant emotion
+scoreEmotion = score_emotion.calculate(result)
+print(scoreEmotion, " (dominant emotion)")
+
+# Find dominant gender
+scoreGender = score_gender.calculate(result)
+print(scoreGender, "(most gender)")
+
+# Find dominant age
+scoreAender = score_age.calculate(result)
+print(scoreAender, "(most age)")
+
 if result is not None:
     # Load the original image from disk
     data8uint = np.fromstring(data, np.uint8)  # Convert string to an unsigned int array
@@ -72,8 +86,6 @@ if result is not None:
 
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-
-
 
     # You'll want to release the camera, otherwise you won't be able to create a new
     # capture object until your script exits
