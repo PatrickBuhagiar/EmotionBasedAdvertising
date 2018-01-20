@@ -61,6 +61,9 @@ if result is not None:
 
     cognitive_api.renderResultOnImage(result, img)
 
+    advert = cv2.imread('Adverts/' + '3' + '.jpg',0)
+    cv2.imshow('advert', advert)
+
     # A nice feature of the imwrite method is that it will automatically choose the
     # correct format based on the file extension you provide. Convenient!
     ig, ax = plt.subplots(figsize=(15, 20))
