@@ -11,7 +11,7 @@ def calculate(result):
     index = scores.index(max(scores))
 
     if index == 0:
-        return "happiness"
+        return "happy"
     elif index == 1:
         return "neutral"
     elif index == 2:
