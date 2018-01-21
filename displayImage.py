@@ -122,7 +122,7 @@ while True:
         #ax.imshow(img)
         #cv2.imshow('image', img)
 
-        time.sleep(5)
+        time.sleep(3)
         #cv2.waitKey(0)
         #cv2.destroyAllWindows()
 
