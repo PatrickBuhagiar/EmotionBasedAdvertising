@@ -12,6 +12,10 @@ import cognitive_api
 import score_emotion
 import score_gender
 import psutil
+import requests
+from io import BytesIO
+from io import StringIO
+import urllib
 
 # Camera 0 is the integrated web cam on my netbook
 camera_port = 0
@@ -48,6 +52,11 @@ def get_image():
         data = f.read()
     return data
 
+def makePostRequest(score):
+    _url = 'http://localhost:8080/adverts/choose'
+    response = requests.request('post', _url, json=score)
+    return response
+
 headers = dict()
 headers['Ocp-Apim-Subscription-Key'] = _key
 headers['Content-Type'] = 'application/octet-stream'
@@ -75,6 +84,11 @@ while True:
         scoreAge = score_age.calculate(result)
         print(scoreAge, "(most age)")
 
+        score = {"emotion":scoreEmotion.upper(), "gender":scoreGender.upper(), "ageGroup":"ALL"}
+        print(str(score))
+        advert = makePostRequest(score).json()
+        print(str(advert))
+
         # Load the original image from disk
         data8uint = np.fromstring(data, np.uint8)  # Convert string to an unsigned int array
         img = cv2.cvtColor(cv2.imdecode(data8uint, cv2.IMREAD_COLOR), cv2.COLOR_BGR2RGB)
@@ -85,10 +99,22 @@ while True:
             if proc.name() == "display":
                 proc.kill()
 
-        advert = Image.open('Adverts/3.jpg')
+        #advert = Image.open('Adverts/3.jpg')
         #img.show()
-        advert.show()
+
+
+        URL = advert["imgURL"]
+
+        with urllib.request.urlopen(URL) as url:
+            with open('temp.jpg', 'wb') as f:
+                f.write(url.read())
+
+        advertImage = Image.open('temp.jpg')
+
+        #urllib.urlopen(url).read()
+        #print(advert["imgURL"])
         #cv2.imshow('advert', advert)
+        advertImage.show()
 
         # A nice feature of the imwrite method is that it will automatically choose the
         # correct format based on the file extension you provide. Convenient!

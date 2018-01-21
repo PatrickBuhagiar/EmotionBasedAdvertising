@@ -14,14 +14,14 @@ def get_age(x):
 
 def bin_age(x):
     if x >= 0 and x < 10:
-        category = "0-10"
+        category = "CHILDREN"
     if x >= 10 and x < 18:
-        category = "9-18"
+        category = "ADOLESCENT"
     if x >= 18 and x < 30:
-        category = "19-30"
-    if x >= 30 and x < 70:
-        category = "31-70"
-    if x >= 70:
-        category = "above 70"
+        category = "YOUNG ADULT"
+    if x >= 30 and x < 40:
+        category = "ADULT"
+    if x >= 40 and x < 70:
+        category = "OLD"
 
     return category
