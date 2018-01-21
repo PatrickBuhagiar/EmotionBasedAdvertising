@@ -84,7 +84,7 @@ while True:
         scoreAge = score_age.calculate(result)
         print(scoreAge, "(most age)")
 
-        score = {"emotion":scoreEmotion.upper(), "gender":scoreGender.upper(), "ageGroup":"ALL"}
+        score = {"emotion":scoreEmotion.upper(), "gender":scoreGender.upper(), "ageGroup":scoreAge.upper()}
         print(str(score))
         advert = makePostRequest(score).json()
         print(str(advert))

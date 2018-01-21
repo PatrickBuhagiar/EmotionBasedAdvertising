@@ -16,7 +16,7 @@ def bin_age(x):
     if x >= 0 and x < 10:
         category = "CHILDREN"
     if x >= 10 and x < 18:
-        category = "ADOLESCENT"
+        category = "TEEN"
     if x >= 18 and x < 30:
         category = "YOUNG ADULT"
     if x >= 30 and x < 60:
